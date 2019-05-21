@@ -9,7 +9,7 @@
 import MapKit
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, MKMapViewDelegate {
 
     @IBOutlet var mapView: MKMapView!
     
@@ -28,6 +28,30 @@ class ViewController: UIViewController {
 
     }
 
-
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        // 1
+        guard annotation is Capital else { return nil }
+        
+        // 2
+        let identifier = "Capital"
+        
+        // 3
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+        
+        if annotationView == nil {
+            // 4
+            annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            annotationView?.canShowCallout = true
+            
+            // 5
+            let btn = UIButton(type: .detailDisclosure)
+            annotationView?.rightCalloutAccessoryView = btn
+        } else {
+            // 6
+            annotationView?.annotation = annotation
+        }
+        
+        return annotationView
+    }
 }
 
